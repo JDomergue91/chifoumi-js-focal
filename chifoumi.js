@@ -2,7 +2,10 @@ let gagnant;
 
 let titre = document.getElementById("titre");
 let rejouer = document.getElementById("boutonRejouer");
-let chifoumiTab = ['images-pfc/ciseau.jpg', 'images-pfc/feuille.jpg', 'images-pfc/pierre.jpg'];
+let chifoumiTab = ["images-pfc/ciseau.jpg", "images-pfc/feuille.jpg", "images-pfc/pierre.jpg"];
+
+let aleaGauche;
+let aleaDroite;
 
 let gauche = document.getElementById("gauche");
 let imgGauche = document.getElementById('image-gauche');
@@ -30,10 +33,6 @@ function initialisation() {
     gauche.style.pointerEvents = 'auto';
 }
 
-// gauche.addEventListener("click", (event) => {
-//     rejouer.style.display = "initial";
-//     imgGauche.style.backgroundImage = `url('images-pfc/ciseau.jpg')`;
-// })
 
 function jouer(zone) {
     
@@ -50,12 +49,16 @@ function jouer(zone) {
         imgDroite.style.backgroundImage = `url(${random})`;
     }
     document.getElementById(zone).style.pointerEvents = 'none';
-    verifEgalite();
+   
 
-    console.log(verifEgalite());
+    aleaDroite = chifouCheck(imgDroite.style.backgroundImage);
+    aleaGauche = chifouCheck(imgGauche.style.backgroundImage);
 
 
-    if (verifEgalite() === true) {
+    setTimeout(() => {
+
+
+    if ( imgDroite.style.backgroundImage === imgGauche.style.backgroundImage ) {
         titre.textContent = "Aie, c'est l'egalite pas de chance";
         resultatDroite.textContent = "Egalite";
         droite.style.backgroundColor = "orange";
@@ -65,35 +68,41 @@ function jouer(zone) {
         rejouer.style.display = "initial";
 
     } else {
-        if (imgGauche.style.backgroundImage == `url('images-pfc/ciseau.jpg')` && imgDroite.style.backgroundImage == `url('images-pfc/feuille.jpg')` ||
-            imgGauche.style.backgroundImage == `url('images-pfc/pierre.jpg')` && imgDroite.style.backgroundImage == `url('images-pfc/ciseau.jpg')` ||
-            imgGauche.style.backgroundImage == `url('images-pfc/feuille.jpg')` && imgDroite.style.backgroundImage == `url('images-pfc/pierre.jpg')`){
+        if (aleaGauche == "ciseau" && aleaDroite == "feuille" || aleaGauche == "feuille" && aleaDroite == "pierre" || aleaGauche == "pierre" && aleaDroite == "ciseau") {
 
                 resultatGauche.textContent = "Gagne";
                 gauche.style.backgroundColor = "green";
                 resultatDroite.textContent = "Perdu";
                 droite.style.backgroundColor = "red";
-
+                
+                rejouer.style.display = "initial";
             } 
-        else if(imgDroite.style.backgroundImage == `url('images-pfc/ciseau.jpg')` && imgGauche.style.backgroundImage == `url('images-pfc/feuille.jpg')` ||
-                imgDroite.style.backgroundImage == `url('images-pfc/pierre.jpg')` && imgGauche.style.backgroundImage == `url('images-pfc/ciseau.jpg')` ||
-                imgDroite.style.backgroundImage == `url('images-pfc/feuille.jpg')` && imgGauche.style.backgroundImage == `url('images-pfc/pierre.jpg')`){
+        else if(aleaDroite == "ciseau" && aleaGauche== "feuille" || aleaDroite == "feuille" && aleaGauche == "pierre" || aleaDroite == "pierre" && aleaGauche == "ciseau"){
                 
                     resultatDroite.textContent = "Gagne";
                     droite.style.backgroundColor = "green";
                     resultatGauche.textContent = "Perdu";
                     gauche.style.backgroundColor = "red";
+
+                    rejouer.style.display = "initial";
         } 
-        
-        rejouer.style.display = "initial";
-    }
     
+    }
+
+    }, "1000");
 }
 
-function verifEgalite() {
-    if (imgDroite.style.backgroundImage === imgGauche.style.backgroundImage) {
-        return true;
-    } else {
-        return false;
+function chifouCheck(image){
+
+    let chifouCheckTab = ['url("images-pfc/ciseau.jpg")', 'url("images-pfc/feuille.jpg")', 'url("images-pfc/pierre.jpg")'];
+
+
+    if (image == chifouCheckTab[0]) {
+        return "ciseau";
+    } else if (image == chifouCheckTab[1]) {
+        return "feuille";
+    } else if (image == chifouCheckTab[2]) {
+        return "pierre";
     }
 }
+
